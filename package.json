@@ -4,6 +4,7 @@
   "git": "https://github.com/petit-kit/scroll",
   "version": "0.0.1",
   "type": "module",
+  "private": false,
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
