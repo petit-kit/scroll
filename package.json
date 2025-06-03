@@ -1,0 +1,29 @@
+{
+  "name": "@petitkit/scroll",
+  "author": "@petit-kit",
+  "git": "https://github.com/petit-kit/scroll",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup --minify terser",
+    "prepublishOnly": "npm run build"
+  },
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "terser": "^5.40.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@petitkit/utils": "^1.0.11"
+  }
+}
