@@ -2,7 +2,7 @@
   "name": "@petitkit/scroll",
   "author": "@petit-kit",
   "git": "https://github.com/petit-kit/scroll",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "type": "module",
   "private": false,
   "main": "dist/index.cjs",
