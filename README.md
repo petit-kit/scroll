@@ -14,7 +14,7 @@ A comprehensive smooth scrolling library that replaces native browser scrolling 
 ## Installation
 
 ```bash
-npm install @petitkit/utils
+npm install @petitkit/scroll
 ```
 
 ## Basic Usage

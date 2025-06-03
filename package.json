@@ -1,8 +1,24 @@
 {
   "name": "@petitkit/scroll",
-  "author": "@petit-kit",
-  "git": "https://github.com/petit-kit/scroll",
-  "version": "0.0.3",
+  "homepage": "https://github.com/petit-kit/scroll",
+  "bugs": {
+    "url": "https://github.com/petit-kit/scroll/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/petit-kit/scroll"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "@petitssoldats",
+    "email": "hello@nicolasforestier.dev",
+    "url": "https://nicolasforestier.dev"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/petitssoldats"
+  },
+  "version": "0.0.5",
   "type": "module",
   "private": false,
   "main": "dist/index.cjs",
@@ -17,7 +33,6 @@
     "build": "tsup --minify terser",
     "prepublishOnly": "npm run build"
   },
-  "license": "ISC",
   "description": "",
   "devDependencies": {
     "terser": "^5.40.0",
