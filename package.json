@@ -1,5 +1,5 @@
 {
-  "name": "@petitkit/scroll",
+  "name": "@petit-kit/scroll",
   "homepage": "https://github.com/petit-kit/scroll",
   "bugs": {
     "url": "https://github.com/petit-kit/scroll/issues"
@@ -18,7 +18,7 @@
     "type": "github",
     "url": "https://github.com/sponsors/petitssoldats"
   },
-  "version": "0.0.5",
+  "version": "0.0.01",
   "type": "module",
   "private": false,
   "main": "dist/index.cjs",
@@ -40,6 +40,6 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@petitkit/utils": "^1.0.11"
+    "@petit-kit/utils": "^0.0.1"
   }
 }

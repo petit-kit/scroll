@@ -1,42 +1,48 @@
+import LerpWithInertia from './lerp.cjs';
+export { default as sticky } from './plugins/sticky.cjs';
+export { default as intersection } from './plugins/intersection.cjs';
+export { default as speed } from './plugins/speed.cjs';
+export { default as mask } from './plugins/mask.cjs';
+export { default as scrollbar } from './plugins/scrollbar.cjs';
+
 declare class Scroll {
+    current: {
+        x: LerpWithInertia;
+        y: LerpWithInertia;
+    };
     private _root;
-    private _target;
-    private _current;
-    private _touchStart;
-    private _touchDelta;
+    private _lerp;
+    private _slowLerp;
     private _offsets;
     private _observer;
     private _triggers;
     private _plugins;
     private _progressListeners;
-    private _willSaveScroll;
-    private _slowLerp;
-    constructor({ root, lerp, slowLerp, offset, plugins, }?: {
-        root?: HTMLElement;
-        lerp?: number;
-        slowLerp?: number;
-        offset?: number | [number, number];
-        plugins?: any[];
+    constructor({ root, lerp, offsets, plugins, }: {
+        root?: HTMLElement | undefined;
+        lerp?: number | undefined;
+        offsets?: number[] | undefined;
+        plugins?: never[] | undefined;
     });
-    private _formatOffset;
+    private _saveScroll;
+    private _onScroll;
     private _onResize;
-    private _onWheel;
-    private _onTouchStart;
-    private _onTouchMove;
-    private _onTouchEnd;
-    private _onKeyDown;
-    private _handleIntersection;
-    private _updateTriggers;
     private _animate;
     private _applyScroll;
-    private _saveScroll;
+    private _formatOffset;
+    private _handleIntersection;
+    private _updateTriggers;
+    getRoot(): HTMLElement;
+    getOffsets(): [number, number, number, number];
+    getProgress(): {
+        x: number;
+        y: number;
+    };
     getCurrent(): {
         x: number;
         y: number;
     };
-    getOffsets(): [number, number, number, number];
-    getRoot(): HTMLElement;
-    getProgress(): {
+    getTarget(): {
         x: number;
         y: number;
     };
@@ -50,7 +56,11 @@ declare class Scroll {
             end: number;
         };
     };
-    scrollTo(target: number | Element, { offset, lerp }?: {
+    scrollXTo(target: number | Element, { offset, lerp }?: {
+        offset?: number | undefined;
+        lerp?: number | undefined;
+    }): void;
+    scrollYTo(target: number | Element, { offset, lerp }?: {
         offset?: number | undefined;
         lerp?: number | undefined;
     }): void;
@@ -75,13 +85,5 @@ declare class Scroll {
         };
     }) => void): void;
 }
-declare function intersectionPlugin(Scroll: any): void;
-declare function stickyPlugin(Scroll: any): void;
-declare function speedPlugin(Scroll: any): void;
-declare function maskPlugin(Scroll: any): void;
-declare function scrollBarPlugin(styles?: {
-    scrollBar: {};
-    scrollBarThumb: {};
-}): (Scroll: any) => void;
 
-export { Scroll as default, intersectionPlugin as intersection, maskPlugin as mask, scrollBarPlugin as scrollBar, speedPlugin as speed, stickyPlugin as sticky };
+export { Scroll as default };

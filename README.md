@@ -1,215 +1,254 @@
-# Smooth Scroll Library
+# Scroll
 
-A comprehensive smooth scrolling library that replaces native browser scrolling with customizable, smooth animations and advanced features.
+A smooth scrolling library with inertia and plugin support for modern web applications.
 
 ## Features
 
-- **Smooth Scrolling**: Lerp-based smooth scrolling with customizable easing
-- **Touch Support**: Full touch gesture support with inertia
-- **Keyboard Navigation**: Arrow keys, space bar, and modifier key combinations
-- **Scroll Persistence**: Automatic scroll position saving/restoration
-- **Plugin System**: Extensible architecture with built-in plugins
-- **TypeScript**: Full TypeScript support with proper typing
+- Smooth scrolling with inertia
+- Plugin system for extended functionality
+- Intersection observer integration
+- Progress tracking
+- Customizable lerp (linear interpolation) values
+- Support for both horizontal and vertical scrolling
+- Built-in plugins for sticky elements, intersection detection, speed control, masking, and scrollbar customization
 
 ## Installation
 
 ```bash
-npm install @petitkit/scroll
+npm install @petit-kit/scroll
 ```
 
 ## Basic Usage
 
 ```javascript
-import Scroll from './scroll';
+import Scroll from '@petit-kit/scroll';
 
-// Initialize with default settings
+// Initialize with default options
 const scroll = new Scroll();
 
 // Initialize with custom options
 const scroll = new Scroll({
   root: document.querySelector('.scroll-container'),
-  lerp: 0.1,
-  slowLerp: 0.05,
-  offset: [0, 100], // [top, right, bottom, left] or [vertical, horizontal]
-  plugins: [sticky, intersection, speed]
+  lerp: 0.25, // Smoothness factor (0-1)
+  offsets: [0, 0], // [x, y] offset values
+  plugins: [] // Optional plugins
 });
 ```
 
-## Configuration Options
+## API
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `root` | HTMLElement | `document.body` | The scrollable container element |
-| `lerp` | number | `0.25` | Linear interpolation factor for smooth scrolling |
-| `slowLerp` | number | `0.1` | Slower lerp factor for keyboard navigation |
-| `offset` | number \\| [number, number] | `[0, 0]` | Scroll offset values |
-| `plugins` | Plugin[] | `[]` | Array of plugins to enable |
+### Constructor Options
 
-## API Methods
+- `root` (HTMLElement, default: document.body): The root element to scroll
+- `lerp` (number, default: 0.25): Linear interpolation factor (0-1)
+- `offsets` (number[] | number, default: [0, 0]): Scroll offset values % of the viewport height
+- `plugins` (array, default: []): Array of plugins to initialize
 
-### Core Methods
+### Methods
 
-```javascript
-// Get current scroll position
-const current = scroll.getCurrent(); // { x: number, y: number }
+#### `getRoot()`
+Returns the root element being scrolled.
 
-// Get scroll progress (0-1)
-const progress = scroll.getProgress(); // { x: number, y: number }
+#### `getOffsets()`
+Returns the current offset values.
 
-// Get scroll bounds
-const bounds = scroll.getBounds(); 
-// { x: { start: number, end: number }, y: { start: number, end: number } }
+#### `getProgress()`
+Returns the current scroll progress as an object with `x` and `y` values (0-1).
 
-// Scroll to position or element
-scroll.scrollTo(500); // Scroll to Y position
-scroll.scrollTo(element, { offset: 100, lerp: 0.1 });
-```
+#### `getCurrent()`
+Returns the current scroll position as an object with `x` and `y` values.
 
-### Event Listeners
+#### `getTarget()`
+Returns the target scroll position as an object with `x` and `y` values.
 
-```javascript
-// Listen to scroll progress changes
-scroll.onProgress((progress, current, bounds) => {
-  console.log('Scroll progress:', progress.y);
-});
-```
+#### `getBounds()`
+Returns the scroll boundaries as an object with `x` and `y` ranges.
 
-### Trigger System
+#### `scrollXTo(target, options)`
+Scroll horizontally to a target position or element.
+- `target`: number | Element
+- `options`: { offset?: number, lerp?: number }
 
-```javascript
-// Add scroll-based triggers
-scroll.trigger(element, (trigger) => (scroll) => {
-  // Custom trigger logic
-  console.log('Element in view:', trigger.active);
-}, {
-  offset: [0.1, 0.1], // Trigger offsets
-  forever: true // Keep triggering even when out of view
-});
-```
+#### `scrollYTo(target, options)`
+Scroll vertically to a target position or element.
+- `target`: number | Element
+- `options`: { offset?: number, lerp?: number }
 
-## Built-in Plugins
+#### `trigger(element, callback, options)`
+Set up an intersection trigger for an element.
+- `element`: HTMLElement
+- `callback`: Function
+- `options`: { offset?: number | [number, number], forever?: boolean }
 
-### Intersection Plugin
+#### `onProgress(callback)`
+Add a progress listener.
+- `callback`: Function(progress, current, bounds)
 
-Provides intersection-based animations and callbacks.
+## Plugins
 
-```javascript
-import { intersection } from './scroll';
-
-const scroll = new Scroll({
-  plugins: [intersection]
-});
-
-// Use intersection detection
-scroll.intersection(element, ({ intersection, overlapping, bb }) => {
-  // intersection: { x: number, y: number } - intersection ratios
-  // overlapping: { x: number, y: number } - overlap amounts
-  // bb: DOMRect - bounding box
-});
-```
+The library comes with several built-in plugins that enhance the scrolling experience:
 
 ### Sticky Plugin
 
-Creates sticky positioning effects.
+The sticky plugin allows elements to stick to a specific position while scrolling.
 
 ```javascript
-import { sticky } from './scroll';
+import Scroll, { sticky } from '@petit-kit/scroll';
 
 const scroll = new Scroll({
   plugins: [sticky]
 });
 
-// Make element sticky
+// Make an element sticky
 scroll.sticky(element, {
-  parent: containerElement, // Optional parent container
-  offset: [0, 100] // Offset from viewport edges
+  parent: containerElement, // Optional parent element
+  offset: [0, 0] // Optional offset values [x, y]
+});
+```
+
+Options:
+- `parent` (HTMLElement): The parent element to stick relative to
+- `offset` (number | [number, number]): Offset values for the sticky position
+- `willChange` (boolean, default: true): Whether to enable hardware acceleration
+
+### Intersection Plugin
+
+The intersection plugin provides detailed intersection information for elements during scroll.
+
+```javascript
+import Scroll, { intersection } from '@petit-kit/scroll';
+
+const scroll = new Scroll({
+  plugins: [intersection]
+});
+
+// Track element intersection
+scroll.intersection(element, (data) => {
+  const { intersection, overlapping, bb } = data;
+  // intersection: { x, y, top, bottom } - Intersection ratios
+  // overlapping: { x, y } - Overlapping ratios
+  // bb: DOMRect - Element's bounding box
 });
 ```
 
 ### Speed Plugin
 
-Enables parallax and speed-based effects.
+The speed plugin creates parallax-like effects by moving elements at different speeds during scroll.
 
 ```javascript
-import { speed } from './scroll';
+import Scroll, { speed } from '@petit-kit/scroll';
 
 const scroll = new Scroll({
   plugins: [speed]
 });
 
-// Apply speed effect (parallax)
+// Apply speed effect to element
 scroll.speed(element, {
-  speed: 0.5, // 0.5 = half speed, 2 = double speed
-  centered: true // Center-based calculation
+  speed: 0.5, // Speed multiplier
+  centered: true // Whether to center the effect
 });
 ```
 
+Options:
+- `speed` (number): Speed multiplier (1 = normal scroll speed)
+- `centered` (boolean, default: true): Whether to center the effect relative to viewport
+
 ### Mask Plugin
 
-Creates clipping/masking effects based on scroll position.
+The mask plugin creates scroll-based masking effects using clip-path.
 
 ```javascript
-import { mask } from './scroll';
+import Scroll, { mask } from '@petit-kit/scroll';
 
 const scroll = new Scroll({
   plugins: [mask]
 });
 
 // Apply mask effect
-scroll.mask(maskElement, targetElement, false); // invert = false
+scroll.mask(element, targetElements, false);
 ```
 
-### ScrollBar Plugin
+Parameters:
+- `element` (HTMLElement): The element to apply the mask to
+- `targets` (HTMLElement | HTMLElement[]): Target elements to mask against
+- `invert` (boolean, default: false): Whether to invert the mask effect
 
-Adds a custom scrollbar with smooth animations.
+### Scrollbar Plugin
+
+The scrollbar plugin provides a customizable scrollbar with smooth interactions.
 
 ```javascript
-import { scrollBar } from './scroll';
+import Scroll, { scrollbar } from '@petit-kit/scroll';
 
 const scroll = new Scroll({
-  plugins: [scrollBar({
+  plugins: [scrollbar()]
+});
+
+// With custom styles
+const scroll = new Scroll({
+  plugins: [scrollbar({
     scrollBar: {
-      right: '5px',
-      width: '8px'
+      width: '12px',
+      backgroundColor: 'rgba(0, 0, 0, 0.1)'
     },
     scrollBarThumb: {
-      backgroundColor: '#333',
-      borderRadius: '4px'
-    }
+      backgroundColor: '#000',
+      borderRadius: '6px'
+    },
+    inactiveOpacity: 0.2,
+    activeOpacity: 1
   })]
 });
 ```
 
-## Keyboard Controls
+Options:
+- `scrollBar` (object): Styles for the scrollbar container
+- `scrollBarThumb` (object): Styles for the scrollbar thumb
+- `inactiveOpacity` (number, default: 0.2): Opacity when inactive
+- `activeOpacity` (number, default: 1): Opacity when active/hovered
 
-- **Arrow Keys**: Navigate in small increments
-- **Space**: Page down (Shift+Space for page up)
-- **Cmd/Ctrl + Arrow Up**: Jump to top
-- **Cmd/Ctrl + Arrow Down**: Jump to bottom
-- **Cmd/Shift + R**: Disable scroll saving on refresh
+Features:
+- Smooth hover effects
+- Draggable thumb
+- Click-to-scroll
+- Customizable appearance
+- Automatic hiding when inactive
 
-## Touch Gestures
+## Example
 
-- **Swipe**: Natural touch scrolling with momentum
-- **Inertia**: Continues scrolling after touch release
-- **Multi-touch**: Prevents accidental zooming
+```javascript
+import Scroll from '@petit-kit/scroll';
 
-## Browser Support
+const scroll = new Scroll({
+  lerp: 0.1, // Smoother scrolling
+  offsets: [0.05, 0.05] // Add some padding
+});
 
-- Modern browsers with ES6+ support
-- Touch-enabled devices
-- Intersection Observer API support
+// Scroll to an element
+scroll.scrollYTo(document.querySelector('#section-2'), {
+  offset: 0.05, // Offset by 100px
+  lerp: 0.05 // Slower, smoother scroll
+});
 
-## Performance Notes
+// Track scroll progress
+scroll.onProgress((progress, current, bounds) => {
+  console.log('Scroll progress:', progress);
+  console.log('Current position:', current);
+  console.log('Scroll bounds:', bounds);
+});
 
-- Uses `requestAnimationFrame` for smooth 60fps animations
-- Automatically manages `will-change` properties
-- Debounced resize handling
-- Optimized transform calculations
+// Set up an intersection trigger
+scroll.trigger(
+  document.querySelector('.animate-on-scroll'),
+  (trigger) => (scroll) => {
+    if (trigger.active) {
+      trigger.element.classList.add('visible');
+    }
+  },
+  { offset: 0.05 }
+);
+```
 
 ## License
 
-MIT License
-```
-
-This README provides comprehensive documentation for your smooth scrolling library, covering all the main features, plugins, and usage examples. The library appears to be a sophisticated solution for creating smooth, customizable scrolling experiences with extensive plugin support.
+MIT

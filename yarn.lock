@@ -179,10 +179,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@petitkit/utils@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@petitkit/utils/-/utils-1.0.11.tgz#1f2f46916fb1ee050b10efc40070595ded087c0b"
-  integrity sha512-GwVZf429xkLuzy++Xg9zCIqfRzwVpK1sm+6AQVj1ooFhjed8BKKyQ93Ua+8/1FqMgkobt7A0LkXyAj052LfqEw==
+"@petit-kit/utils@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@petit-kit/utils/-/utils-0.0.1.tgz#03c17e704536c5aa05e664fcb5f7555611157b81"
+  integrity sha512-z1BaRDL+JbEs25jCGqXaanaIbt2imjuCyWBHe5PlWqxe6609Nu6dbqIuBKlHzTa64PzeQbp4dcoG+8EIgy/ZYQ==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
